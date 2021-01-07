@@ -75,3 +75,4 @@ crashlytics-build.properties
 *.zipx
 Assets/Mirror
 Assets/Photon
+*.png
