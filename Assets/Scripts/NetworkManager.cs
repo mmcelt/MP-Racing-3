@@ -9,7 +9,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	#region Fields & Properties
 
 	[Header("Login UI")]
+	public GameObject LoginUIPanel;
 	public InputField PlayerNameInput;
+
+	[Header("Connecting Info Panel")]
+	public GameObject ConnectingInfoUIPanel;
+
+	[Header("Creating Room Info Panel")]
+	public GameObject CreatingRoomInfoUIPanel;
+
+	[Header("GameOptions  Panel")]
+	public GameObject GameOptionsUIPanel;
+
+	[Header("Create Room Panel")]
+	public GameObject CreateRoomUIPanel;
+
+	[Header("Inside Room Panel")]
+	public GameObject InsideRoomUIPanel;
+
+	[Header("Join Random Room Panel")]
+	public GameObject JoinRandomRoomUIPanel;
 
 	#endregion
 
@@ -22,7 +41,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	void Start() 
 	{
-		
+		ActivatePanel(LoginUIPanel.name);
 	}
 	
 	void Update() 
@@ -39,6 +58,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 		if (!string.IsNullOrEmpty(playerName))
 		{
+			ActivatePanel(ConnectingInfoUIPanel.name);
+
 			//connect to Photon...
 			if (!PhotonNetwork.IsConnected)
 			{
@@ -51,6 +72,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			Debug.Log("Player Name is Invalid!");
 		}
 	}
+
+	public void OnCancelButtonClicked()
+	{
+		ActivatePanel(GameOptionsUIPanel.name);
+	}
 	#endregion
 
 	#region Photon Callbacks
@@ -62,13 +88,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	public override void OnConnectedToMaster()	//called when successfully connected to Photon
 	{
+		ActivatePanel(GameOptionsUIPanel.name);
+
 		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is Connected to Photon");
 	}
 	#endregion
 
 	#region Public Methods
 
-
+	public void ActivatePanel(string panelNameToBeActivated)
+	{
+		LoginUIPanel.SetActive(LoginUIPanel.name.Equals(panelNameToBeActivated));
+		ConnectingInfoUIPanel.SetActive(ConnectingInfoUIPanel.name.Equals(panelNameToBeActivated));
+		CreatingRoomInfoUIPanel.SetActive(CreatingRoomInfoUIPanel.name.Equals(panelNameToBeActivated));
+		CreateRoomUIPanel.SetActive(CreateRoomUIPanel.name.Equals(panelNameToBeActivated));
+		GameOptionsUIPanel.SetActive(GameOptionsUIPanel.name.Equals(panelNameToBeActivated));
+		JoinRandomRoomUIPanel.SetActive(JoinRandomRoomUIPanel.name.Equals(panelNameToBeActivated));
+	}
 	#endregion
 
 	#region Private Methods
