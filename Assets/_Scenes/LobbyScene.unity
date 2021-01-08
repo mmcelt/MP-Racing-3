@@ -407,6 +407,7 @@ MonoBehaviour:
   CreatingRoomInfoUIPanel: {fileID: 346571420}
   GameOptionsUIPanel: {fileID: 1897633495}
   CreateRoomUIPanel: {fileID: 274552716}
+  RoomNameInput: {fileID: 460123711}
   InsideRoomUIPanel: {fileID: 1598625407}
   JoinRandomRoomUIPanel: {fileID: 1438516555}
 --- !u!4 &108857019
@@ -4496,8 +4497,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 108857018}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
         m_MethodName: OnCreateRoomButtonClicked
         m_Mode: 1
         m_Arguments:

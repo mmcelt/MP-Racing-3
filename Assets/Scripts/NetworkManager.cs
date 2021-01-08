@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -23,6 +24,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	[Header("Create Room Panel")]
 	public GameObject CreateRoomUIPanel;
+	public InputField RoomNameInput;
 
 	[Header("Inside Room Panel")]
 	public GameObject InsideRoomUIPanel;
@@ -77,6 +79,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	{
 		ActivatePanel(GameOptionsUIPanel.name);
 	}
+
+	public void OnCreateRoomButtonClicked()
+	{
+		string roomName = RoomNameInput.text;
+
+		if (string.IsNullOrEmpty(roomName))
+		{
+			roomName = "Room" + Random.Range(1000, 10000);
+		}
+
+		RoomOptions roomOptions = new RoomOptions();
+		roomOptions.MaxPlayers = 3;
+
+		string[] roomPropsInLobby = { "gm" };   //gm=game mode
+
+		//two game modes:
+		//1. racing = "rc"
+		//2. death race = "dr"
+
+		ExitGames.Client.Photon.Hashtable customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "gm", "rc" } };
+
+		roomOptions.CustomRoomPropertiesForLobby = roomPropsInLobby;
+		roomOptions.CustomRoomProperties = customRoomProperties;
+
+		PhotonNetwork.CreateRoom(roomName, roomOptions);
+	}
 	#endregion
 
 	#region Photon Callbacks
@@ -91,6 +119,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		ActivatePanel(GameOptionsUIPanel.name);
 
 		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is Connected to Photon");
+	}
+
+	public override void OnCreatedRoom()
+	{
+		Debug.Log(PhotonNetwork.CurrentRoom.Name + " is created.");
+	}
+
+	public override void OnJoinedRoom()
+	{
+		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is joined to " + PhotonNetwork.CurrentRoom.Name);
+
+		if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("gm"))
+		{
+			object gameModeName;
+			if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gm",out gameModeName))
+			{
+				Debug.Log("Game Mode: " + gameModeName.ToString());
+			}
+		}
 	}
 	#endregion
 
