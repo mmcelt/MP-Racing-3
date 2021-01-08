@@ -410,6 +410,9 @@ MonoBehaviour:
   RoomNameInput: {fileID: 460123711}
   GameMode: rc
   InsideRoomUIPanel: {fileID: 1598625407}
+  RoomInfoText: {fileID: 314537884}
+  PlayerListPrefab: {fileID: 1294863439290794768, guid: 46f749e614f847a47940ad1dde964668, type: 3}
+  PlayerListContent: {fileID: 244169820}
   JoinRandomRoomUIPanel: {fileID: 1438516555}
 --- !u!4 &108857019
 Transform:

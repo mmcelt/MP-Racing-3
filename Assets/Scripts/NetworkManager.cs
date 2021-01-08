@@ -29,6 +29,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	[Header("Inside Room Panel")]
 	public GameObject InsideRoomUIPanel;
+	public Text RoomInfoText;
+	public GameObject PlayerListPrefab;
+	public Transform PlayerListContent;
 
 	[Header("Join Random Room Panel")]
 	public GameObject JoinRandomRoomUIPanel;
@@ -145,7 +148,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		Debug.Log(PhotonNetwork.CurrentRoom.Name + " is created.");
 	}
 
-	public override void OnJoinedRoom()
+	public override void OnJoinedRoom()	//only called on joining player's machine
 	{
 		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is joined to " + PhotonNetwork.CurrentRoom.Name + " Player count: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
@@ -153,10 +156,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 		if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("gm"))
 		{
-			object gameModeName;
-			if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gm",out gameModeName))
+			//object gameModeName;
+			//if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gm",out gameModeName))
+			//{
+			//	Debug.Log("Game Mode: " + gameModeName.ToString());
+			//}
+
+			RoomInfoText.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name + " " +
+				" Players/MaxPlayers: " +
+				PhotonNetwork.CurrentRoom.PlayerCount + " / " +
+				PhotonNetwork.CurrentRoom.MaxPlayers;
+
+			foreach(Player player in PhotonNetwork.PlayerList)
 			{
-				Debug.Log("Game Mode: " + gameModeName.ToString());
+				GameObject playerListGameObject = Instantiate(PlayerListPrefab, PlayerListContent);
+				playerListGameObject.transform.localScale = Vector3.one;
+				playerListGameObject.GetComponent<PlayerListEntryInitializer>().Initialize(player.ActorNumber, player.NickName);
+
 			}
 		}
 	}
