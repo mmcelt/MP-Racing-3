@@ -25,6 +25,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	[Header("Create Room Panel")]
 	public GameObject CreateRoomUIPanel;
 	public InputField RoomNameInput;
+	public string GameMode;
 
 	[Header("Inside Room Panel")]
 	public GameObject InsideRoomUIPanel;
@@ -82,28 +83,33 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	public void OnCreateRoomButtonClicked()
 	{
-		string roomName = RoomNameInput.text;
+		ActivatePanel(CreatingRoomInfoUIPanel.name);
 
-		if (string.IsNullOrEmpty(roomName))
+		if (GameMode != null)
 		{
-			roomName = "Room" + Random.Range(1000, 10000);
+			string roomName = RoomNameInput.text;
+
+			if (string.IsNullOrEmpty(roomName))
+			{
+				roomName = "Room" + Random.Range(1000, 10000);
+			}
+
+			RoomOptions roomOptions = new RoomOptions();
+			roomOptions.MaxPlayers = 3;
+
+			string[] roomPropsInLobby = { "gm" };   //gm=game mode
+
+			//two game modes:
+			//1. racing = "rc"
+			//2. death race = "dr"
+
+			ExitGames.Client.Photon.Hashtable customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "gm", GameMode } };
+
+			roomOptions.CustomRoomPropertiesForLobby = roomPropsInLobby;
+			roomOptions.CustomRoomProperties = customRoomProperties;
+
+			PhotonNetwork.CreateRoom(roomName, roomOptions);
 		}
-
-		RoomOptions roomOptions = new RoomOptions();
-		roomOptions.MaxPlayers = 3;
-
-		string[] roomPropsInLobby = { "gm" };   //gm=game mode
-
-		//two game modes:
-		//1. racing = "rc"
-		//2. death race = "dr"
-
-		ExitGames.Client.Photon.Hashtable customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "gm", "rc" } };
-
-		roomOptions.CustomRoomPropertiesForLobby = roomPropsInLobby;
-		roomOptions.CustomRoomProperties = customRoomProperties;
-
-		PhotonNetwork.CreateRoom(roomName, roomOptions);
 	}
 	#endregion
 
@@ -151,6 +157,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		CreateRoomUIPanel.SetActive(CreateRoomUIPanel.name.Equals(panelNameToBeActivated));
 		GameOptionsUIPanel.SetActive(GameOptionsUIPanel.name.Equals(panelNameToBeActivated));
 		JoinRandomRoomUIPanel.SetActive(JoinRandomRoomUIPanel.name.Equals(panelNameToBeActivated));
+	}
+
+	public void SetGameMode(string gameMode)
+	{
+		GameMode = gameMode;
 	}
 	#endregion
 
