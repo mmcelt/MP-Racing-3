@@ -111,6 +111,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			PhotonNetwork.CreateRoom(roomName, roomOptions);
 		}
 	}
+
+	public void OnJoinRandomRoomButtonClicked(string gameMode)
+	{
+		GameMode = gameMode;
+
+		ExitGames.Client.Photon.Hashtable expectedCustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "gm", gameMode } };
+		PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, 0);
+	}
+
+	public void OnBackButtonClicked()
+	{
+		ActivatePanel(GameOptionsUIPanel.name);
+	}
 	#endregion
 
 	#region Photon Callbacks
@@ -134,7 +147,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	public override void OnJoinedRoom()
 	{
-		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is joined to " + PhotonNetwork.CurrentRoom.Name);
+		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is joined to " + PhotonNetwork.CurrentRoom.Name + " Player count: " + PhotonNetwork.CurrentRoom.PlayerCount);
+
+		ActivatePanel(InsideRoomUIPanel.name);
 
 		if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("gm"))
 		{
@@ -143,6 +158,38 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			{
 				Debug.Log("Game Mode: " + gameModeName.ToString());
 			}
+		}
+	}
+
+	public override void OnJoinRandomFailed(short returnCode, string message)
+	{
+		Debug.Log($"Failed to join a Random Room: {message}");
+
+		//if there is no room, create one...
+		if (GameMode != null)
+		{
+			string roomName = RoomNameInput.text;
+
+			if (string.IsNullOrEmpty(roomName))
+			{
+				roomName = "Room" + Random.Range(1000, 10000);
+			}
+
+			RoomOptions roomOptions = new RoomOptions();
+			roomOptions.MaxPlayers = 3;
+
+			string[] roomPropsInLobby = { "gm" };   //gm=game mode
+
+			//two game modes:
+			//1. racing = "rc"
+			//2. death race = "dr"
+
+			ExitGames.Client.Photon.Hashtable customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "gm", GameMode } };
+
+			roomOptions.CustomRoomPropertiesForLobby = roomPropsInLobby;
+			roomOptions.CustomRoomProperties = customRoomProperties;
+
+			PhotonNetwork.CreateRoom(roomName, roomOptions);
 		}
 	}
 	#endregion
@@ -157,6 +204,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		CreateRoomUIPanel.SetActive(CreateRoomUIPanel.name.Equals(panelNameToBeActivated));
 		GameOptionsUIPanel.SetActive(GameOptionsUIPanel.name.Equals(panelNameToBeActivated));
 		JoinRandomRoomUIPanel.SetActive(JoinRandomRoomUIPanel.name.Equals(panelNameToBeActivated));
+		InsideRoomUIPanel.SetActive(InsideRoomUIPanel.name.Equals(panelNameToBeActivated));
 	}
 
 	public void SetGameMode(string gameMode)
