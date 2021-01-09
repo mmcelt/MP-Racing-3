@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using UnityEngine.UI;
 
 public class LapController : MonoBehaviourPun
 {
@@ -76,9 +77,10 @@ public class LapController : MonoBehaviourPun
 		_finishOrder++;
 
 		string nickName = photonView.Owner.NickName;
+		int viewID = photonView.ViewID;
 
 		//event data
-		object[] data = new object[] { nickName, _finishOrder };
+		object[] data = new object[] { nickName, _finishOrder, viewID };
 
 		//event options
 		RaiseEventOptions eventOptions = new RaiseEventOptions
@@ -96,15 +98,28 @@ public class LapController : MonoBehaviourPun
 
 	void OnWhoFinishedEventReceived(EventData eventData)
 	{
-		//data contents: string(nickName),int finishOrder
+		//data contents: string(nickName),int (finishOrder),int (viewID)
 		if (eventData.Code != (byte)RaiseEventCode.WhoFinishedEventCode) return;
 
 		object[] recData = (object[])eventData.CustomData;
 
 		string nickNameOfFinshedPlayer = (string)recData[0];
 		_finishOrder = (int)recData[1];
+		int viewID = (int)recData[2];
 
 		Debug.Log(nickNameOfFinshedPlayer + " " + _finishOrder);
+
+		GameObject orderUITextObject = RacingGameManager.Instance.FinishOrderGameObjects[_finishOrder - 1];
+		orderUITextObject.SetActive(true);
+
+		if (viewID == photonView.ViewID)
+		{
+			//the player is me...
+			orderUITextObject.GetComponent<Text>().text = _finishOrder + " - " + nickNameOfFinshedPlayer + " (YOU)";
+			orderUITextObject.GetComponent<Text>().color = Color.red;
+		}
+		else
+			orderUITextObject.GetComponent<Text>().text = _finishOrder + " - " + nickNameOfFinshedPlayer;
 	}
 	#endregion
 }

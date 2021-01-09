@@ -511,8 +511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c9afcfdf05eb640929ae3ba3096d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ThrustForce: {x: 0, y: 0, z: 5}
-  RotationTorque: {x: 0, y: 2, z: 0}
+  ThrustForce: {x: 0, y: 0, z: 45}
+  RotationTorque: {x: 0, y: 8, z: 0}
   ControlsEnabled: 0
 --- !u!114 &-1926956463118244039
 MonoBehaviour:
