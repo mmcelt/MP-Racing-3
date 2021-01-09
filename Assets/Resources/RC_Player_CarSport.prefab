@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -3186576092552077768}
   - component: {fileID: -6490084986405752627}
   - component: {fileID: 4558149505895061489}
+  - component: {fileID: 9210840426208174762}
   m_Layer: 0
   m_Name: RC_Player_CarSport
   m_TagString: Untagged
@@ -202,7 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThrustForce: {x: 0, y: 0, z: 5}
-  RotationTorque: {x: 0, y: 0.5, z: 0}
+  RotationTorque: {x: 0, y: 2, z: 0}
+  ControlsEnabled: 0
 --- !u!114 &4558149505895061489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +218,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 334285780102841316}
+--- !u!114 &9210840426208174762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523779623789243299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81215b00c7a4946bd6c2a9b82d8200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &673072161277074943
 GameObject:
   m_ObjectHideFlags: 0

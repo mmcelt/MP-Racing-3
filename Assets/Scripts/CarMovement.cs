@@ -8,6 +8,7 @@ public class CarMovement : MonoBehaviour
 
 	public Vector3 ThrustForce = new Vector3(0f,0f,45f);
 	public Vector3 RotationTorque = new Vector3(0f, 8f, 0f);
+	public bool ControlsEnabled;
 
 	Rigidbody _theRB;
 
@@ -27,6 +28,8 @@ public class CarMovement : MonoBehaviour
 	
 	void Update() 
 	{
+		if (!ControlsEnabled) return;
+
 		//forward
 		if (Input.GetKey(KeyCode.W))
 		{

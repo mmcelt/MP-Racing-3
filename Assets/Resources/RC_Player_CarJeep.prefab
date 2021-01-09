@@ -323,6 +323,7 @@ GameObject:
   - component: {fileID: 5137859211122546801}
   - component: {fileID: -8886961652514074087}
   - component: {fileID: 2029357721738741150}
+  - component: {fileID: -8552386274896069429}
   m_Layer: 0
   m_Name: RC_Player_CarJeep
   m_TagString: Untagged
@@ -427,7 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThrustForce: {x: 0, y: 0, z: 5}
-  RotationTorque: {x: 0, y: 0.5, z: 0}
+  RotationTorque: {x: 0, y: 2, z: 0}
+  ControlsEnabled: 0
 --- !u!114 &2029357721738741150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +443,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 8755522242653553365}
+--- !u!114 &-8552386274896069429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8151913764945104660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81215b00c7a4946bd6c2a9b82d8200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8755522242653553365
 GameObject:
   m_ObjectHideFlags: 0

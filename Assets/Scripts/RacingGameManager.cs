@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class RacingGameManager : MonoBehaviour
 {
 	#region Fields & Properties
 
+	public static RacingGameManager Instance;
+
 	public GameObject[] PlayerPrefabs;
 	public Transform[] InstantiatePositions;
+	public Text TimeUIText;
 
 	#endregion
 
@@ -18,6 +22,16 @@ public class RacingGameManager : MonoBehaviour
 	#endregion
 
 	#region MonoBehaviour Methods
+
+	void Awake()
+	{
+		if (Instance == null)
+			Instance = this;
+		else if (Instance != this)
+			Destroy(gameObject);
+
+		DontDestroyOnLoad(gameObject);
+	}
 
 	void Start() 
 	{
