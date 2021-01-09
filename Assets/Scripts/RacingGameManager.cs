@@ -13,6 +13,7 @@ public class RacingGameManager : MonoBehaviour
 	public GameObject[] PlayerPrefabs;
 	public Transform[] InstantiatePositions;
 	public Text TimeUIText;
+	public List<GameObject> LapTriggers;
 
 	#endregion
 

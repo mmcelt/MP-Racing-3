@@ -7,7 +7,7 @@ public class PlayerSetup : MonoBehaviourPun
 {
 	#region Fields & Properties
 
-	[SerializeField] GameObject _camera;
+	public GameObject PlayerCamera;
 
 	#endregion
 
@@ -23,12 +23,12 @@ public class PlayerSetup : MonoBehaviourPun
 		if (photonView.IsMine)	//local player
 		{
 			GetComponent<CarMovement>().enabled = true;
-			_camera.SetActive(true);
+			PlayerCamera.SetActive(true);
 		}
 		else
 		{
 			GetComponent<CarMovement>().enabled = false;
-			_camera.SetActive(false);
+			PlayerCamera.SetActive(false);
 		}
 	}
 	#endregion

@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: -6490084986405752627}
   - component: {fileID: 4558149505895061489}
   - component: {fileID: 9210840426208174762}
+  - component: {fileID: 2282243770547206568}
   m_Layer: 0
   m_Name: RC_Player_CarSport
   m_TagString: Untagged
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7544b32b832a2f54494a42d0d881d64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 334285780102841316}
+  PlayerCamera: {fileID: 334285780102841316}
 --- !u!114 &9210840426208174762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +229,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a81215b00c7a4946bd6c2a9b82d8200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2282243770547206568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523779623789243299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70ed72d96d975148bc403ab0211ece0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &673072161277074943
