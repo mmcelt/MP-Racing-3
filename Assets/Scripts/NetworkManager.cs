@@ -36,6 +36,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	[Header("Join Random Room Panel")]
 	public GameObject JoinRandomRoomUIPanel;
 
+	Dictionary<int, GameObject> _playerListGameObjects;
+
 	#endregion
 
 	#region Getters
@@ -127,6 +129,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	{
 		ActivatePanel(GameOptionsUIPanel.name);
 	}
+
+	public void OnLeaveGameButtonClicked()
+	{
+		PhotonNetwork.LeaveRoom();
+	}
 	#endregion
 
 	#region Photon Callbacks
@@ -148,7 +155,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		Debug.Log(PhotonNetwork.CurrentRoom.Name + " is created.");
 	}
 
-	public override void OnJoinedRoom()	//only called on joining player's machine
+	//only called on the joining player's machine (local player's machine)
+	public override void OnJoinedRoom()	
 	{
 		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " is joined to " + PhotonNetwork.CurrentRoom.Name + " Player count: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
@@ -162,19 +170,56 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			//	Debug.Log("Game Mode: " + gameModeName.ToString());
 			//}
 
-			RoomInfoText.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name + " " +
-				" Players/MaxPlayers: " +
-				PhotonNetwork.CurrentRoom.PlayerCount + " / " +
-				PhotonNetwork.CurrentRoom.MaxPlayers;
+			UpdatePlayerRoomHeaderInfo();
 
-			foreach(Player player in PhotonNetwork.PlayerList)
+			if (_playerListGameObjects == null)
+				_playerListGameObjects = new Dictionary<int, GameObject>();
+
+			foreach (Player player in PhotonNetwork.PlayerList)
 			{
 				GameObject playerListGameObject = Instantiate(PlayerListPrefab, PlayerListContent);
 				playerListGameObject.transform.localScale = Vector3.one;
 				playerListGameObject.GetComponent<PlayerListEntryInitializer>().Initialize(player.ActorNumber, player.NickName);
 
+				_playerListGameObjects.Add(player.ActorNumber, playerListGameObject);
 			}
 		}
+	}
+
+	//called when a remote player enters the room
+	public override void OnPlayerEnteredRoom(Player newPlayer)	
+	{
+		UpdatePlayerRoomHeaderInfo();
+
+		GameObject playerListGameObject = Instantiate(PlayerListPrefab, PlayerListContent);
+		playerListGameObject.transform.localScale = Vector3.one;
+		playerListGameObject.GetComponent<PlayerListEntryInitializer>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
+
+		_playerListGameObjects.Add(newPlayer.ActorNumber, playerListGameObject);
+	}
+
+	//called when a remote player leaves the room
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+	{
+		UpdatePlayerRoomHeaderInfo();
+
+		Destroy(_playerListGameObjects[otherPlayer.ActorNumber].gameObject);
+		_playerListGameObjects.Remove(otherPlayer.ActorNumber);
+
+	}
+
+	//called when the local player leaves the room
+	public override void OnLeftRoom()
+	{
+		ActivatePanel(GameOptionsUIPanel.name);
+
+		foreach(GameObject playerListGO in _playerListGameObjects.Values)
+		{
+			Destroy(playerListGO);
+		}
+
+		_playerListGameObjects.Clear();
+		_playerListGameObjects = null;
 	}
 
 	public override void OnJoinRandomFailed(short returnCode, string message)
@@ -231,6 +276,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 	#region Private Methods
 
-
+	void UpdatePlayerRoomHeaderInfo()
+	{
+		RoomInfoText.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name + " " +
+			" Players/MaxPlayers: " +
+			PhotonNetwork.CurrentRoom.PlayerCount + " / " +
+			PhotonNetwork.CurrentRoom.MaxPlayers;
+	}
 	#endregion
 }
