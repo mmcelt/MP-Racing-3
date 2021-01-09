@@ -33,11 +33,11 @@ public class TimeCountdownManager : MonoBehaviourPun
 		if (_timeToStartRace >= 0.0f)
 		{
 			_timeToStartRace -= Time.deltaTime;
-			photonView.RPC(nameof(SetTime), RpcTarget.AllBuffered, _timeToStartRace);
+			photonView.RPC(nameof(RpcSetTime), RpcTarget.AllBuffered, _timeToStartRace);
 		}
 		else
 		{
-			photonView.RPC(nameof(StartRace), RpcTarget.AllBuffered);
+			photonView.RPC(nameof(RpcStartRace), RpcTarget.AllBuffered);
 		}
 	}
 	#endregion
@@ -50,7 +50,7 @@ public class TimeCountdownManager : MonoBehaviourPun
 	#region Private Methods
 
 	[PunRPC]
-	void SetTime(float time)
+	void RpcSetTime(float time)
 	{
 		if (time > 0)
 		{
@@ -63,7 +63,7 @@ public class TimeCountdownManager : MonoBehaviourPun
 	}
 
 	[PunRPC]
-	void StartRace()
+	void RpcStartRace()
 	{
 		GetComponent<CarMovement>().ControlsEnabled = true;
 		enabled = false;

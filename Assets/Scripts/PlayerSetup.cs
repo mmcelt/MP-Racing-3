@@ -23,11 +23,13 @@ public class PlayerSetup : MonoBehaviourPun
 		if (photonView.IsMine)	//local player
 		{
 			GetComponent<CarMovement>().enabled = true;
+			GetComponent<LapController>().enabled = true;
 			PlayerCamera.SetActive(true);
 		}
 		else
 		{
 			GetComponent<CarMovement>().enabled = false;
+			GetComponent<LapController>().enabled = false;
 			PlayerCamera.SetActive(false);
 		}
 	}
