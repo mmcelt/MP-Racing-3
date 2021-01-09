@@ -33,6 +33,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	public GameObject PlayerListPrefab;
 	public Transform PlayerListContent;
 	public GameObject StartGameButton;
+	public Text GameModeText;
+	public Image PanelBackground;
+	public Sprite RacingBackground, DeathRaceBackground;
 
 	[Header("Join Random Room Panel")]
 	public GameObject JoinRandomRoomUIPanel;
@@ -51,6 +54,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	void Start() 
 	{
 		ActivatePanel(LoginUIPanel.name);
+
+		PhotonNetwork.AutomaticallySyncScene = true;
 	}
 	#endregion
 
@@ -130,6 +135,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	{
 		PhotonNetwork.LeaveRoom();
 	}
+
+	public void OnStartGameButtonClicked()
+	{
+		if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("gm"))
+		{
+			if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsValue("rc"))
+			{
+				PhotonNetwork.LoadLevel("RacingScene");
+			}
+			else if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsValue("dr"))
+			{
+				PhotonNetwork.LoadLevel("DeathRaceScene");
+			}
+		}
+	}
 	#endregion
 
 	#region Photon Callbacks
@@ -166,7 +186,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			//	Debug.Log("Game Mode: " + gameModeName.ToString());
 			//}
 
-			UpdatePlayerRoomHeaderInfo();
+			UpdatePlayerRoomHeaderInfo(); //I MADE THIS INSTEAD OF COPY & PASTE SAME CODE...
+
+			if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsValue("rc"))
+			{
+				//racing mode...
+				GameModeText.text = "LET'S RACE!";
+				PanelBackground.sprite = RacingBackground;
+			}
+			else if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsValue("dr"))
+			{
+				//death race mode...
+				GameModeText.text = "DEATH RACE!";
+				PanelBackground.sprite = DeathRaceBackground;
+			}
 
 			if (_playerListGameObjects == null)
 				_playerListGameObjects = new Dictionary<int, GameObject>();
