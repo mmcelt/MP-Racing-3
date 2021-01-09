@@ -32,6 +32,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	public Text RoomInfoText;
 	public GameObject PlayerListPrefab;
 	public Transform PlayerListContent;
+	public GameObject StartGameButton;
 
 	[Header("Join Random Room Panel")]
 	public GameObject JoinRandomRoomUIPanel;
@@ -185,7 +186,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 				_playerListGameObjects.Add(player.ActorNumber, playerListGameObject);
 			}
+
+			StartGameButton.SetActive(false);
 		}
+	}
+
+	public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+	{
+		GameObject playerListGameObject;
+
+		if(_playerListGameObjects.TryGetValue(targetPlayer.ActorNumber, out playerListGameObject))
+		{
+			object isPlayerReady;
+
+			if(changedProps.TryGetValue(MPRG.PLAYER_READY, out isPlayerReady))
+			{
+				playerListGameObject.GetComponent<PlayerListEntryInitializer>().SetPlayerReady((bool)isPlayerReady);
+			}
+		}
+		StartGameButton.SetActive(CheckPlayersReady());
 	}
 
 	//called when a remote player enters the room
@@ -198,6 +217,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		playerListGameObject.GetComponent<PlayerListEntryInitializer>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
 
 		_playerListGameObjects.Add(newPlayer.ActorNumber, playerListGameObject);
+
+		StartGameButton.SetActive(CheckPlayersReady());
 	}
 
 	//called when a remote player leaves the room
@@ -208,6 +229,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 		Destroy(_playerListGameObjects[otherPlayer.ActorNumber].gameObject);
 		_playerListGameObjects.Remove(otherPlayer.ActorNumber);
 
+		StartGameButton.SetActive(CheckPlayersReady());
 	}
 
 	//called when the local player leaves the room
@@ -222,6 +244,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 		_playerListGameObjects.Clear();
 		_playerListGameObjects = null;
+	}
+
+	public override void OnMasterClientSwitched(Player newMasterClient)
+	{
+		if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
+		{
+			StartGameButton.SetActive(CheckPlayersReady());
+		}
 	}
 
 	public override void OnJoinRandomFailed(short returnCode, string message)
@@ -284,6 +314,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 			" Players/MaxPlayers: " +
 			PhotonNetwork.CurrentRoom.PlayerCount + " / " +
 			PhotonNetwork.CurrentRoom.MaxPlayers;
+	}
+
+	bool CheckPlayersReady()
+	{
+		if (!PhotonNetwork.IsMasterClient) return false;
+
+		foreach(Player player in PhotonNetwork.PlayerList)
+		{
+			object isPlayerReady;
+			if(player.CustomProperties.TryGetValue(MPRG.PLAYER_READY, out isPlayerReady))
+			{
+				if (!(bool)isPlayerReady) return false;
+			}
+			else
+			{
+				//no player_ready custom property found
+				return false;
+			}
+		}
+		//everyone is ready
+		return true;
 	}
 	#endregion
 }
