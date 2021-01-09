@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 5364980499784368849}
   - component: {fileID: 6644687128709775103}
   - component: {fileID: 7912178770550127597}
+  - component: {fileID: -8886961652514074087}
   m_Layer: 0
   m_Name: RC_Player_CarJeep
   m_TagString: Untagged
@@ -395,6 +396,18 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-8886961652514074087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8151913764945104660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c9afcfdf05eb640929ae3ba3096d37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8755522242653553365
 GameObject:
   m_ObjectHideFlags: 0
