@@ -169,7 +169,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 73.172646
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -403,7 +403,9 @@ GameObject:
   - component: {fileID: 6046230882979512417}
   - component: {fileID: 586489019113817725}
   - component: {fileID: 6845365739958815403}
+  - component: {fileID: -292548058600978249}
   - component: {fileID: 7533983493223902660}
+  - component: {fileID: -1926956463118244039}
   m_Layer: 0
   m_Name: RC_Player_CarMuscle
   m_TagString: Untagged
@@ -472,13 +474,29 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   observableSearch: 0
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: -292548058600978249}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-292548058600978249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7547419182675889572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &7533983493223902660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +509,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c9afcfdf05eb640929ae3ba3096d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThrustForce: {x: 0, y: 0, z: 5}
+  RotationTorque: {x: 0, y: 0.5, z: 0}
+--- !u!114 &-1926956463118244039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7547419182675889572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7544b32b832a2f54494a42d0d881d64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 1636509372824285373}
 --- !u!1 &8553288829510907189
 GameObject:
   m_ObjectHideFlags: 0
