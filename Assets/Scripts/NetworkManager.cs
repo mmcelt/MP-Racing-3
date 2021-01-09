@@ -51,11 +51,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	{
 		ActivatePanel(LoginUIPanel.name);
 	}
-	
-	void Update() 
-	{
-		
-	}
 	#endregion
 
 	#region UI Callback Methods
@@ -180,6 +175,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 				GameObject playerListGameObject = Instantiate(PlayerListPrefab, PlayerListContent);
 				playerListGameObject.transform.localScale = Vector3.one;
 				playerListGameObject.GetComponent<PlayerListEntryInitializer>().Initialize(player.ActorNumber, player.NickName);
+
+				object isPlayerReady;
+
+				if (player.CustomProperties.TryGetValue(MPRG.PLAYER_READY, out isPlayerReady))
+				{
+					playerListGameObject.GetComponent<PlayerListEntryInitializer>().SetPlayerReady((bool)isPlayerReady);
+				}
 
 				_playerListGameObjects.Add(player.ActorNumber, playerListGameObject);
 			}
