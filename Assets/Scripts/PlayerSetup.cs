@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class PlayerSetup : MonoBehaviourPun
 {
 	#region Fields & Properties
 
 	public GameObject PlayerCamera;
+	public TextMeshProUGUI PlayerNameText;
 
 	#endregion
 
@@ -32,6 +34,7 @@ public class PlayerSetup : MonoBehaviourPun
 			GetComponent<LapController>().enabled = false;
 			PlayerCamera.SetActive(false);
 		}
+		SetPlayerUI();
 	}
 	#endregion
 
@@ -42,6 +45,14 @@ public class PlayerSetup : MonoBehaviourPun
 
 	#region Private Methods
 
+	void SetPlayerUI()
+	{
+		if (PlayerNameText == null) return;
 
+		PlayerNameText.text = photonView.Owner.NickName;
+
+		if (photonView.IsMine)
+			PlayerNameText.gameObject.SetActive(false);
+	}
 	#endregion
 }
